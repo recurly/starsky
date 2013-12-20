@@ -1,0 +1,33 @@
+{
+  "name": "rabbit-node",
+  "version": "0.0.0",
+  "description": "A higher level and opinionated library on top of node-amqp.",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/recurly/rabbit-node.git"
+  },
+  "keywords": [
+    "rabbitmq",
+    "node-amqp"
+  ],
+  "author": "Recurly",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/recurly/rabbit-node/issues"
+  },
+  "homepage": "https://github.com/recurly/rabbit-node",
+  "devDependencies": {
+    "should": "2.1.1",
+    "jshint-stylish": "0.1.4",
+    "mocha": "1.16.1",
+    "jshint": "2.3.0"
+  },
+  "dependencies": {
+    "debug": "0.7.4",
+    "amqp": "0.1.8"
+  }
+}
