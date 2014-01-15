@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var hopper = require('..');
+var path = require('path');
+
+/**
+ * Options.
+ */
+
+program
+.option('--mq-host [mq_host]')
+.option('--mq-port [mq_port]')
+.parse(process.argv);
+
+/**
+ * Load as a consumer.
+ */
+
+var file = path.resolve(process.cwd(), program.args[0]);
+var consumer = require(file);
+
+/**
+ * Eat messages.
+ */
+
+hopper.once('ready', function () {
+  hopper
+  .queue(consumer.queue)
+  .subscribe(consumer.topic)
+  .consume(consumer.consume);
+});
+
+/**
+ * Connect.
+ */
+
+hopper.connect();
