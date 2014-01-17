@@ -34,8 +34,8 @@
     "defaults": "1.0.0",
     "is-type": "0.0.1",
     "node-uuid": "1.4.1",
-    "bunyan": "0.22.1",
     "configurable": "0.0.1",
-    "commander": "2.1.0"
+    "commander": "2.1.0",
+    "debug": "~0.7.4"
   }
 }
