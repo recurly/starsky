@@ -9,8 +9,18 @@ var path = require('path');
  */
 
 program
-.option('--mq-host [mq_host]')
-.option('--mq-port [mq_port]')
+.version(starsky.version)
+.usage('[options] consumer_module')
+.option('--config [config_path]', 'yaml configuration file path')
+.option('--mq_exchange [mq_exchange]', 'rabbitmq exchange name')
+.option('--mq_host [mq_host]', 'rabbitmq host')
+.option('--mq_port [mq_port]', 'rabbitmq port')
+.option('--mq_vhost [mq_vhost]', 'rabbitmq vhost')
+.option('--mq_username [mq_username]', 'rabbitmq username')
+.option('--mq_password [mq_password]', 'rabbitmq password')
+.option('--mq_tls [mq_tls]', 'rabbitmq tls connection')
+.option('--mq_tls_cert [mq_tls_cert]', 'rabbitmq tls cert file path')
+.option('--mq_tls_key [mq_tls_key]', 'rabbitmq tls key file path')
 .parse(process.argv);
 
 /**
