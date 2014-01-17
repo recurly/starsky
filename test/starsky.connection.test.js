@@ -14,7 +14,7 @@ describe('connection', function () {
     it('should emit "close"', function (done) {
       var starsky = new Starsky();
       starsky.on('close', done);
-      starsky.on('ready', starsky.close);
+      starsky.on('ready', starsky.disconnect);
       starsky.connect();
     })
   });
