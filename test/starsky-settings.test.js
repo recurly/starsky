@@ -66,17 +66,4 @@ describe('settings', function () {
       starsky.get('mq password').should.equal('secret');
     });
   });
-
-  describe('.log-level', function () {
-    var starsky = new Starsky();
-
-    it('should default to "info"', function () {
-      starsky.get('log level').should.equal('info');
-    });
-
-    it('should be configurable', function () {
-      starsky.set('log level', 'fatal');
-      starsky.get('log level').should.equal('fatal');
-    });
-  });
 });
