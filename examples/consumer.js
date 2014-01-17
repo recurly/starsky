@@ -1,13 +1,8 @@
 
-var starsky = require('..');
+exports.queue = 'test-queue';
+exports.topic = 'starsky.test';
 
-starsky.once('ready', function () {
-  var queue = starsky.queue('email');
-  queue.subscribe('email.send');
-  queue.consume(function (msg, done) {
-    console.log('%j', msg);
-    done();
-  });
-});
-
-starsky.connect();
+exports.consume = function (msg, next) {
+  console.log('%j', msg);
+  setTimeout(next, 1000);
+};
