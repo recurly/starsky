@@ -1,17 +1,13 @@
 
-var hopper = require('..');
+var starsky = require('..');
 
-hopper.once('ready', function () {
-  var queue = hopper.queue('austin');
-  queue.subscribe('some.topic');
+starsky.once('ready', function () {
+  var queue = starsky.queue('email');
+  queue.subscribe('email.send');
   queue.consume(function (msg, done) {
     console.log('%j', msg);
-    if (100 === msg.id) {
-      done(new Error('uh oh'));
-    } else {
-      done();
-    }
+    done();
   });
 });
 
-hopper.connect();
+starsky.connect();

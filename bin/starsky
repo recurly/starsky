@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var hopper = require('..');
+var starsky = require('..');
 var path = require('path');
 
 /**
@@ -24,8 +24,8 @@ var consumer = require(file);
  * Eat messages.
  */
 
-hopper.once('ready', function () {
-  hopper
+starsky.once('ready', function () {
+  starsky
   .queue(consumer.queue)
   .subscribe(consumer.topic)
   .consume(consumer.consume);
@@ -35,4 +35,4 @@ hopper.once('ready', function () {
  * Connect.
  */
 
-hopper.connect();
+starsky.connect();

@@ -1,14 +1,17 @@
 {
-  "name": "rabbit-node",
+  "name": "hopper",
   "version": "0.0.0",
   "description": "A higher level and opinionated library on top of node-amqp.",
   "main": "index.js",
+  "bin": {
+    "hopper": "bin/hopper"
+  },
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/recurly/rabbit-node.git"
+    "url": "git://github.com/recurly/hopper.git"
   },
   "keywords": [
     "rabbitmq",
@@ -17,9 +20,9 @@
   "author": "Recurly",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/recurly/rabbit-node/issues"
+    "url": "https://github.com/recurly/hopper/issues"
   },
-  "homepage": "https://github.com/recurly/rabbit-node",
+  "homepage": "https://github.com/recurly/hopper",
   "devDependencies": {
     "should": "2.1.1",
     "jshint-stylish": "0.1.4",
@@ -31,8 +34,8 @@
     "defaults": "1.0.0",
     "is-type": "0.0.1",
     "node-uuid": "1.4.1",
-    "bunyan": "~0.22.1",
+    "bunyan": "0.22.1",
     "configurable": "0.0.1",
-    "commander": "~2.1.0"
+    "commander": "2.1.0"
   }
 }

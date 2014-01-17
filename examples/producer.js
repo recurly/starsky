@@ -1,21 +1,15 @@
 
-var hopper = require('..');
+var starsky = require('..');
 
-hopper.once('ready', function () {
-  for (var i = 0; i < 10000; i++) send(i);
-});
-
-function send (id) {
-  hopper.send('some.topic', {
-      id: id
-    , user: 'foo'
-    , email: 'new@email.com'
-    , previous: 'old@email.com'
+starsky.once('ready', function () {
+  starsky.send('email.send', {
+      email: 'test@email.com'
+    , body: 'hello world'
   }, confirm);
-}
+});
 
 function confirm (err) {
   if (err) console.error(err.stack);
 }
 
-hopper.connect();
+starsky.connect();
