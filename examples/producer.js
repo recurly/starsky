@@ -2,7 +2,7 @@
 var starsky = require('..');
 
 starsky.once('ready', function () {
-  starsky.send('email.send', {
+  starsky.publish('email.send', {
       email: 'test@email.com'
     , body: 'hello world'
   }, confirm);
