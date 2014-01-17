@@ -1,17 +1,17 @@
 {
-  "name": "hopper",
+  "name": "starsky",
   "version": "0.0.0",
   "description": "A higher level and opinionated library on top of node-amqp.",
   "main": "index.js",
   "bin": {
-    "hopper": "bin/hopper"
+    "starsky": "bin/starsky"
   },
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/recurly/hopper.git"
+    "url": "git://github.com/recurly/starsky.git"
   },
   "keywords": [
     "rabbitmq",
@@ -20,9 +20,9 @@
   "author": "Recurly",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/recurly/hopper/issues"
+    "url": "https://github.com/recurly/starsky/issues"
   },
-  "homepage": "https://github.com/recurly/hopper",
+  "homepage": "https://github.com/recurly/starsky",
   "devDependencies": {
     "should": "2.1.1",
     "jshint-stylish": "0.1.4",
