@@ -15,11 +15,12 @@ test:
 		--recursive
 
 test-cov: lib-cov
-	@LIB_COV=1 $(MAKE) test \
-		REPORTER=html-cov > coverage.html
+	@LIB_COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
 
 lib-cov:
+	@touch coverage.html
 	@jscoverage lib lib-cov
+	@open coverage.html
 
 lint:
 	@./node_modules/.bin/jshint index.js lib \
