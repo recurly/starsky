@@ -8,7 +8,9 @@ Starsky is a high-level, opininated node module for writing services that consum
   - persistant messages
   - publisher confirms
 
-## Connecting
+## Usage
+
+### Connecting
 
 To connect, invoke `starsky.connect()`. The callback will be invoked once the connection to RabbitMQ has been established and the underlying exchange as been created and/or opened.
 
@@ -18,7 +20,7 @@ var starsky = require('starsky');
 starsky.connect(callback);
 ```
 
-## Configuring
+### Configuring
 
 To configure programatically, invoke `starsky.set()` with the the option name and value:
 
@@ -47,7 +49,7 @@ There are several configuration options:
   - `mq api ssl` -- Use SSL for all requests to the rabbitmq http api. Defaults to `false`.
   - `namespace` -- A prefix to prepend to queue names. Defaults to `undefined`
 
-## Publishing
+### Publishing
 
 To publish a message, invoke `startsky.publish()` with the topic name, the message and the callback which should be used for the message confirmation.
 
@@ -65,7 +67,7 @@ function confirm (err) {
 }
 ```
 
-## Consuming
+### Consuming
 
 Consumers are defined by a simple node module that exports a few key things:
 
@@ -131,6 +133,26 @@ Then we just need to start the producer and watch the messages flow.
 
 ```sh
 $ node ./examples/producer.js
+```
+
+## Development
+
+Installing
+
+```sh
+$ make
+```
+
+Running tests
+
+```sh
+$ make test
+```
+
+Code Coverage *(requires jscoverage)*
+
+```sh
+$ make lib-cov
 ```
 
 ## License
