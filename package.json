@@ -28,19 +28,16 @@
     "jshint-stylish": "0.1.4",
     "mocha": "1.16.1",
     "jshint": "2.3.0",
-    "sinon": "~1.7.3"
+    "sinon": "1.7.3"
   },
   "dependencies": {
     "amqp": "0.1.8",
-    "defaults": "1.0.0",
-    "is-type": "0.0.1",
     "node-uuid": "1.4.1",
-    "configurable": "0.0.1",
     "commander": "2.1.0",
-    "debug": "~0.7.4",
-    "yaml": "~0.2.3",
-    "to-snake-case": "~0.1.2",
-    "to-space-case": "~0.1.3",
-    "component-type": "~1.0.0"
+    "debug": "0.7.4",
+    "js-yaml": "3.0.1",
+    "to-snake-case": "0.1.2",
+    "to-space-case": "0.1.3",
+    "component-type": "1.0.0"
   }
 }
