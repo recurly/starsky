@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var program = require('commander');
-var starsky = require('..');
 var path = require('path');
+var starsky = require('..');
+var program = require('commander');
 
 /**
  * Options.
@@ -10,39 +10,84 @@ var path = require('path');
 
 program
 .version(starsky.version)
-.usage('[options] consumer_module')
-.option('--config [config_path]', 'yaml configuration file path')
-.option('--mq_exchange [mq_exchange]', 'rabbitmq exchange name')
-.option('--mq_host [mq_host]', 'rabbitmq host')
-.option('--mq_port [mq_port]', 'rabbitmq port')
-.option('--mq_vhost [mq_vhost]', 'rabbitmq vhost')
-.option('--mq_username [mq_username]', 'rabbitmq username')
-.option('--mq_password [mq_password]', 'rabbitmq password')
-.option('--mq_tls [mq_tls]', 'rabbitmq tls connection')
-.option('--mq_tls_cert [mq_tls_cert]', 'rabbitmq tls cert file path')
-.option('--mq_tls_key [mq_tls_key]', 'rabbitmq tls key file path')
+.usage('[options] consumer-module.js')
+.option('--config [config]', 'filepath to the yaml or json configuration')
+.option('--namespace [namespace]', 'namespace to prepend to consumer queue names')
+.option('--mq_exchange [mq_exchange]', 'exchange name')
+.option('--mq_host [mq_host]', 'rabbit server host')
+.option('--mq_port [mq_port]', 'rabbit server port')
+.option('--mq_vhost [mq_vhost]', 'rabbit server vhost')
+.option('--mq_username [mq_username]', 'rabbit server username')
+.option('--mq_password [mq_password]', 'rabbit server password')
+.option('--mq_tls [mq_tls]', 'use tls for the rabbit server connection')
+.option('--mq_tls_cert [mq_tls_cert]', 'filepath to the tls cert')
+.option('--mq_tls_key [mq_tls_key]', 'filepath to the tls key')
+.option('--mq_api_host [mq_api_host]', 'rabbit http api host')
+.option('--mq_api_port [mq_api_port]', 'rabbit http api port')
+.option('--mq_api_ssl [mq_api_ssl]', 'use ssl for the rabbit http api')
 .parse(process.argv);
 
 /**
- * Load as a consumer.
+ * Configure from `program` options.
+ *
+ * TODO: refactor duplication, this sucks....
  */
 
-var file = path.resolve(process.cwd(), program.args[0]);
-var consumer = require(file);
+var config = program.config;
 
-/**
- * Eat messages.
- */
+if (config) {
+  starsky.load(path.resolve(config));
+}
 
-starsky.once('ready', function () {
-  starsky
-  .queue(consumer.queue)
-  .subscribe(consumer.topic)
-  .consume(consumer.consume);
-});
+if (!config) {
+  starsky.set({
+      'mq_exchange': program['mq_exchange']
+    , 'mq_host': program['mq_host']
+    , 'mq_port': program['mq_port']
+    , 'mq_vhost': program['mq_vhost']
+    , 'mq_username': program['mq_username']
+    , 'mq_password': program['mq_password']
+    , 'mq_tls': program['mq_tls']
+    , 'mq_tls_cert': program['mq_tls_cert']
+    , 'mq_tls_key': program['mq_tls_key']
+  });
+}
 
 /**
  * Connect.
+ *
+ * TODO: I hacked gracefull shutdown in pretty quick, could use
+ * some work probably...
  */
 
-starsky.connect();
+starsky.connect(function (err) {
+  if (err) return fail(err);
+
+  var file = path.resolve(program.args[0]);
+  var object = require(file);
+  var name = object.name || path.basename(file, '.js');
+  var topic = object.topic;
+  var fn = object.consume;
+  var consumer = starsky.consumer(name, topic);
+
+  process.on('SIGQUIT', function () {
+    consumer.quit(function (err) {
+      if (err) return fail(err);
+      starsky.disconnect();
+      starsky.on('disconnect', function () {
+        process.exit(1);
+      });
+    });
+  });
+
+  consumer.consume(fn);
+});
+
+/**
+ * Error utility.
+ */
+
+function fail (err) {
+  console.error(err.stack || err.message);
+  process.exit(1);
+}

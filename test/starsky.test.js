@@ -1,0 +1,137 @@
+
+var sinon = require('sinon');
+var Starsky = require('..').Starsky;
+var Consumer = require('../lib/consumer');
+
+describe('Starsky', function () {
+  describe('.connect()', function () {
+    it('should emit "connect"', function (done) {
+      var starsky = new Starsky();
+      starsky.on('connect', done);
+      starsky.connect();
+    });
+
+     it('should invoke the callback', function (done) {
+      var starsky = new Starsky();
+      var spy = sinon.spy();
+
+      starsky.connect(spy);
+      starsky.on('connect', function () {
+        spy.calledOnce.should.equal(true);
+        done();
+      });
+    });
+  });
+
+  describe('.disconnect()', function () {
+    var starsky = new Starsky();
+
+    it('should emit "disconnect"', function (done) {
+      starsky.on('disconnect', done);
+      starsky.on('connect', starsky.disconnect);
+      starsky.connect();
+    })
+  });
+
+  describe('.set()', function () {
+    var starsky = new Starsky();
+
+    before(function () {
+      sinon.stub(starsky.config, 'set');
+    });
+
+    after(function () {
+      starsky.config.set.restore();
+    });
+
+    it('should proxy to config.set()', function () {
+      starsky.set('mq host', 'whatever');
+      starsky.config.set.calledWith('mq host', 'whatever').should.equal(true);
+    });
+  });
+
+  describe('.get()', function () {
+    var starsky = new Starsky();
+
+    before(function () {
+      sinon.stub(starsky.config, 'get');
+    });
+
+    after(function () {
+      starsky.config.get.restore();
+    });
+
+    it('should proxy to config.get()', function () {
+      starsky.get('namespace');
+      starsky.config.get.calledWith('namespace').should.equal(true);
+    });
+  });
+
+  describe('.load()', function () {
+    var starsky = new Starsky();
+
+    before(function () {
+      sinon.stub(starsky.config, 'load');
+    });
+
+    after(function () {
+      starsky.config.load.restore();
+    });
+
+    it('should proxy to config.load()', function () {
+      starsky.load('/my/config.yml');
+      starsky.config.load.calledWith('/my/config.yml').should.equal(true);
+    });
+  });
+
+
+  describe('.publish()', function () {
+    describe('before connected', function () {
+      it('should callback() with an error', function (done) {
+        var starsky = new Starsky();
+        starsky.publish('test', { a: 'a' }, function (err) {
+          err.should.have.property('message', 'not ready');
+          done();
+        });
+      });
+    });
+
+    describe('once connected', function () {
+      it('should callback() with no error', function () {
+        var starsky = new Starsky();
+        starsky.connect(function () {
+          starsky.publish('test', { a: 'a' }, function (err) {
+            if (err) return done(err);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('.consumer()', function () {
+    var starsky = new Starsky();
+    var consumer = starsky.consumer('test-name', 'test.topic');
+    
+    it('should be a consumer', function (done) {
+      consumer.should.be.instanceof(Consumer);
+      done();
+    });
+
+    it('should have a snake-cased name', function (done) {
+      consumer.should.have.property('name', 'test_name');
+      done();
+    });
+
+    it('should have a topic', function (done) {
+      consumer.should.have.property('topic', 'test.topic');
+      done();
+    });
+
+    it('should not have a queue yet', function (done) {
+      consumer.should.have.property('queue', null);
+      done();
+    });
+  });
+
+});

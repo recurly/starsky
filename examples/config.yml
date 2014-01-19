@@ -1,0 +1,7 @@
+mq_host: localhost
+mq_port: 5672
+mq_exchange: starsky
+mq_vhost: /
+mq_tls: false
+mq_username: guest
+mq_password: guest

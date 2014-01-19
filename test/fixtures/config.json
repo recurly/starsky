@@ -1,0 +1,13 @@
+{
+  "namespace": "demo",
+  "mq_host": "somehost",
+  "mq_port": 3000,
+  "mq_exchange": "test",
+  "mq_vhost": "/test",
+  "mq_tls": true,
+  "mq_username": "u",
+  "mq_password": "p",
+  "mq_tls": true,
+  "mq_tls_cert": "/cert/path",
+  "mq_tls_key": "/key/path"
+}

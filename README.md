@@ -10,15 +10,17 @@ Starsky is a high-level, opininated node module for writing services that consum
 
 ## Connecting
 
-To connect, invoke `starsky.connect`:
+To connect, invoke `starsky.connect()`. The callback will be invoked once the connection to RabbitMQ has been established and the underlying exchange as been created and/or opened.
 
 ```js
 var starsky = require('starsky');
 
-starsky.connect();
+starsky.connect(callback);
 ```
 
-To configure, invoke `starsky.set` the the option name and value:
+## Configuring
+
+To configure programatically, invoke `starsky.set()` with the the option name and value:
 
 ```js
 var starsky = require('starsky');
@@ -26,7 +28,7 @@ var starsky = require('starsky');
 starsky.set('mq vhost', '/demo');
 starsky.set('mq tls', true);
 
-starsky.connect();
+starsky.connect(callback);
 ```
 
 There are several configuration options:
@@ -40,35 +42,42 @@ There are several configuration options:
   - `mq tls` -- Whether rabbitmq requires a secure connection. Defaults to `false`.
   - `mq tls cert` -- The rabbitmq tls cert file path, if `tls` is set to true.
   - `mq tls key` -- The rabbitmq tls key file path, if `tls` is set to true.
+  - `mq api host` -- The host of the rabbitmq http api. Defaults to `localhost`
+  - `mq api port` -- The port of the rabbitmq http api. Defaults to `15672`.
+  - `mq api ssl` -- Use SSL for all requests to the rabbitmq http api. Defaults to `false`.
+  - `namespace` -- A prefix to prepend to queue names. Defaults to `undefined`
 
 ## Publishing
 
-To publish a message, invoke 'startsky.publish' with the topic name, the message and the callback which should be used for the message confirmation.
+To publish a message, invoke `startsky.publish()` with the topic name, the message and the callback which should be used for the message confirmation.
 
 ```js
 var starsky = require('starsky');
 
-starsky.publish('starsky.test', {
-  subject: 'test message'
+starsky.connect(function () {
+  starsky.publish('starsky.test', {
+    subject: 'test message'
+  }, confirm);
 });
 
-starsky.connect();
+function confirm (err) {
+  if (err) throw err
+}
 ```
 
 ## Consuming
 
 Consumers are defined by a simple node module that exports a few key things:
 
-  - the `queue` to create and recieve message from
-  - the `topic` to use as a subscription binding
-  - the `consume` function to process the actual messages
+  - `name` -- The name of the queue to create and recieve message from.
+  - `topic` -- The topic to use as a subscription binding.
+  - `consume` -- The function to mass each message to.
 
 For example:
 
 ```js
-exports.queue = 'test-queue';
+exports.name = 'test-consumer';
 exports.topic = 'starsky.test';
-
 exports.consume = function (msg, next) {
   console.log('%j', msg);
   setTimeout(next, 1000);
@@ -81,30 +90,48 @@ In order to run the consumer, leverage the cli tool that comes with this library
 $ starsky [options] <cosumer_module>
 ```
 
-The options are the same as the configuration mentioned above:
+The options are the same as the configuration mentioned [above](#configuring):
 
 ```sh
-$ starsky --help
+$ ./bin/starsky --help
 
-  Usage: starsky [options] consumer_module
+  Usage: starsky [options] consumer-module.js
 
   Options:
 
     -h, --help                   output usage information
     -V, --version                output the version number
-    --config [config_path]       yaml configuration file path
-    --mq_exchange [mq_exchange]  rabbitmq exchange name
-    --mq_host [mq_host]          rabbitmq host
-    --mq_port [mq_port]          rabbitmq port
-    --mq_vhost [mq_vhost]        rabbitmq vhost
-    --mq_username [mq_username]  rabbitmq username
-    --mq_password [mq_password]  rabbitmq password
-    --mq_tls [mq_tls]            rabbitmq tls connection
-    --mq_tls_cert [mq_tls_cert]  rabbitmq tls cert file path
-    --mq_tls_key [mq_tls_key]    rabbitmq tls key file path
+    --config [config]            filepath to the yaml or json configuration
+    --namespace [namespace]      namespace to prepend to consumer queue names
+    --mq_exchange [mq_exchange]  exchange name
+    --mq_host [mq_host]          rabbit server host
+    --mq_port [mq_port]          rabbit server port
+    --mq_vhost [mq_vhost]        rabbit server vhost
+    --mq_username [mq_username]  rabbit server username
+    --mq_password [mq_password]  rabbit server password
+    --mq_tls [mq_tls]            use tls for the rabbit server connection
+    --mq_tls_cert [mq_tls_cert]  filepath to the tls cert
+    --mq_tls_key [mq_tls_key]    filepath to the tls key
+    --mq_api_host [mq_api_host]  rabbit http api host
+    --mq_api_port [mq_api_port]  rabbit http api port
+    --mq_api_ssl [mq_api_ssl]    use ssl for the rabbit http api
 ```
 
-The one option that will standout there is the `config` option. This can be a yaml configuration file that follows the same format as hutch. This allows you to share the same configuration file in an environment where you may have both starsky & hutch consumers.
+The one option that will standout there is the `config` option. This can be a yaml configuration file that follows the same format as Hutch. This allows you to share the same configuration file in an environment where you may have both Starsky & Hutch consumers.
+
+## Examples
+
+To run the examples, we need to start the consumer. We will do this by pointing the starsky bin script to our example consumer.
+
+```sh
+$ starsky --config ./examples/config.yml ./examples/consumer.js
+```
+
+Then we just need to start the producer and watch the messages flow.
+
+```sh
+$ node ./examples/producer.js
+```
 
 ## License
 
