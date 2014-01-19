@@ -8,6 +8,14 @@ Starsky is a high-level, opininated node module for writing services that consum
   - persistant messages
   - publisher confirms
 
+## Install
+
+With npm:
+
+```sh
+$ npm install starsky
+```
+
 ## Usage
 
 ### Connecting
