@@ -16,7 +16,7 @@ describe('Message', function () {
   });
 
   it('should set deliveryMode', function (done) {
-    msg.options.deliveryMode.should.equal(1);
+    msg.options.deliveryMode.should.equal(2);
     done();
   });
 
