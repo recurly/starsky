@@ -1,0 +1,6 @@
+examples/
+node_modules/
+lib-cov/
+test/
+coverage.html
+Makefile
