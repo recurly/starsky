@@ -50,6 +50,7 @@ if (!config) {
     , 'mq_tls': program['mq_tls']
     , 'mq_tls_cert': program['mq_tls_cert']
     , 'mq_tls_key': program['mq_tls_key']
+    , 'namespace': program['namespace']
   });
 }
 
