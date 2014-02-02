@@ -111,5 +111,17 @@ describe('Config', function () {
       config.get('mq tls cert').should.equal('/cert/path');
       config.get('mq tls key').should.equal('/key/path');
     });
+
+    it('should load from an object', function () {
+      var config = new Config();
+      config.set({
+          'mq host': 'somehost'
+        , 'mq port': 3000
+        , 'mq exchange': 'test'
+      });
+      config.get('mq host').should.equal('somehost');
+      config.get('mq port').should.equal(3000);
+      config.get('mq exchange').should.equal('test');
+    });
   });
 });
