@@ -84,6 +84,23 @@ describe('Starsky', function () {
     });
   });
 
+  describe('.configure()', function () {
+    var starsky = new Starsky();
+
+    before(function () {
+      sinon.stub(starsky.config, 'load');
+    });
+
+    after(function () {
+      starsky.config.load.restore();
+    });
+
+    it('should proxy to config.load()', function () {
+      starsky.configure('/my/config.yml');
+      starsky.config.load.calledWith('/my/config.yml').should.equal(true);
+    });
+  });
+
 
   describe('.publish()', function () {
     describe('before connected', function () {
@@ -112,7 +129,7 @@ describe('Starsky', function () {
   describe('.consumer()', function () {
     var starsky = new Starsky();
     var consumer = starsky.consumer('test-name', 'test.topic');
-    
+
     it('should be a consumer', function (done) {
       consumer.should.be.instanceof(Consumer);
       done();
