@@ -1,10 +1,16 @@
 
 var starsky = require('..');
 
+starsky.configure(__dirname + '/config.yml');
+
 setInterval(function () {
   starsky.publish('starsky.test', {
     subject: 'test message'
-  });
+  }, confirm);
 }, 1000);
+
+function confirm (err) {
+  if (err) console.error(err.message);
+}
 
 starsky.connect();
