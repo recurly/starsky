@@ -1,4 +1,9 @@
 
+0.1.2 / 2014-02-17
+==================
+
+  - Reject messages on exceptions [48121880a2](https://github.com/recurly/starsky/commit/48121880a236517cbcae1337f9767fd631a1d1e3)
+
 0.1.1 / 2014-01-31
 ==================
 
