@@ -1,4 +1,9 @@
 
+0.1.3 / 2014-02-17
+==================
+
+  - Added `.configure()`. [6aa02c4f3b](https://github.com/recurly/starsky/commit/6aa02c4f3ba136523945f57a1a579d5a0e2cc4f2)
+
 0.1.2 / 2014-02-17
 ==================
 
