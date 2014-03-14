@@ -67,9 +67,12 @@ starsky.connect(function (err) {
   var file = path.resolve(program.args[0]);
   var object = require(file);
   var name = object.name || path.basename(file, '.js');
-  var topic = object.topic;
+  var topic = object.topic || object.topics;
   var fn = object.consume;
-  var consumer = starsky.consumer(name, topic);
+  var consumer = starsky.consumer(name);
+
+  consumer.subscribe(topic);
+  consumer.consume(fn);
 
   process.on('SIGQUIT', function () {
     consumer.quit(function (err) {
@@ -80,8 +83,6 @@ starsky.connect(function (err) {
       });
     });
   });
-
-  consumer.consume(fn);
 });
 
 /**

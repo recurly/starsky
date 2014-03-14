@@ -128,7 +128,7 @@ describe('Starsky', function () {
 
   describe('.consumer()', function () {
     var starsky = new Starsky();
-    var consumer = starsky.consumer('test-name', 'test.topic');
+    var consumer = starsky.consumer('test-name');
 
     it('should be a consumer', function (done) {
       consumer.should.be.instanceof(Consumer);
@@ -140,8 +140,8 @@ describe('Starsky', function () {
       done();
     });
 
-    it('should have a topic', function (done) {
-      consumer.should.have.property('topic', 'test.topic');
+    it('should have no topics', function (done) {
+      consumer.topics.should.have.length(0);
       done();
     });
 

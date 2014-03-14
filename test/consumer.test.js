@@ -15,10 +15,14 @@ describe('Consumer', function () {
     it('should invoke the consumer fn on each message', function (done) {
       var starsky = new Starsky();
       starsky.connect(function () {
-        var consumer = starsky.consumer('test-2', 'foo.bar');
-        
+        var consumer = starsky.consumer('test-2');
+
+        consumer.subscribe('foo.bar');
         consumer.consume(function (msg, next) {
-          msg.should.have.property('hello', 'world');
+          msg.should.have.property('id');
+          msg.should.have.property('timestamp');
+          msg.should.have.property('topic', 'foo.bar');
+          msg.body.should.have.property('hello', 'world');
           next();
           done();
         });
