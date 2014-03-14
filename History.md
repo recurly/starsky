@@ -1,3 +1,7 @@
+0.2.0 / 2014-03-14
+==================
+
+  - Allow multiple topics. [b1cc8c5c](https://github.com/recurly/starsky/commit/b1cc8c5c6b8c95c2880292c5017df26f6575a39b)
 
 0.1.3 / 2014-02-17
 ==================
