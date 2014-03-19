@@ -67,7 +67,7 @@ starsky.connect(function (err) {
   var file = path.resolve(program.args[0]);
   var object = require(file);
   var name = object.name || path.basename(file, '.js');
-  var topic = object.topic || object.topics;
+  var topic = object.topic || object.topics || name;
   var fn = object.consume;
   var consumer = starsky.consumer(name);
 
