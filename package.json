@@ -1,6 +1,6 @@
 {
   "name": "starsky",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A higher level and opinionated library on top of node-amqp.",
   "main": "index.js",
   "bin": {
