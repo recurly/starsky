@@ -1,16 +1,21 @@
 #!/usr/bin/env node
 
+/**
+ * Module dependenceis.
+ */
+
 var path = require('path');
 var starsky = require('..');
 var program = require('commander');
+var once = require('once-upon');
 
 /**
- * Options.
+ * Program options.
  */
 
 program
 .version(starsky.version)
-.usage('[options] consumer-module.js')
+.usage('[options] path/to/consumer-module.js')
 .option('--config [config]', 'filepath to the yaml or json configuration')
 .option('--namespace [namespace]', 'namespace to prepend to consumer queue names')
 .option('--mq_exchange [mq_exchange]', 'exchange name')
@@ -22,21 +27,22 @@ program
 .option('--mq_tls [mq_tls]', 'use tls for the rabbit server connection')
 .option('--mq_tls_cert [mq_tls_cert]', 'filepath to the tls cert')
 .option('--mq_tls_key [mq_tls_key]', 'filepath to the tls key')
+.option('--timeout [timeout]', 'time to wait after recieving a kill signal before force exiting', 10000)
 .parse(process.argv);
 
 /**
- * Configure from `program` options.
- *
- * TODO: refactor duplication, this sucks....
+ * Configure by loading the `config` file.
  */
 
-var config = program.config;
-
-if (config) {
-  starsky.load(path.resolve(config));
+if (program.config) {
+  starsky.load(path.resolve(program.config));
 }
 
-if (!config) {
+/**
+ * Configure by program options.
+ */
+
+if (!program.config) {
   starsky.set({
       'mq_exchange': program['mq_exchange']
     , 'mq_host': program['mq_host']
@@ -53,9 +59,6 @@ if (!config) {
 
 /**
  * Connect.
- *
- * TODO: I hacked gracefull shutdown in pretty quick, could use
- * some work probably...
  */
 
 starsky.connect(function (err) {
@@ -64,22 +67,28 @@ starsky.connect(function (err) {
   var file = path.resolve(program.args[0]);
   var object = require(file);
   var name = object.name || path.basename(file, '.js');
+  // hack for multiple subscriptions...
   var topic = object.topic || object.topics || name;
   var fn = object.consume;
   var consumer = starsky.consumer(name);
 
-  consumer.subscribe(topic);
-  consumer.consume(fn);
+  once('SIGTERM SIGINT', process, function () {
+    var t = setTimeout(function () {
+      process.exit(1);
+    }, program.timeout);
 
-  process.on('SIGQUIT', function () {
     consumer.quit(function (err) {
       if (err) return fail(err);
       starsky.disconnect();
       starsky.on('disconnect', function () {
-        process.exit(1);
+        clearTimeout(t);
+        process.exit(0);
       });
     });
   });
+
+  consumer.subscribe(topic);
+  consumer.consume(fn);
 });
 
 /**
