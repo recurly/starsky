@@ -31,7 +31,7 @@
     "sinon": "1.7.3"
   },
   "dependencies": {
-    "amqp": "0.1.8",
+    "amqp": "0.2.0",
     "node-uuid": "1.4.1",
     "commander": "2.1.0",
     "debug": "0.7.4",
