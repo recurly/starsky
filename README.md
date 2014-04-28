@@ -1,7 +1,7 @@
 
 # Starsky
 
-Starsky is a high-level, opinionated node module for writing services that consume messages from RabbitMQ. It's modeled directly after the elegant approach taken by the Ruby library, [Hutch](https://github.com/gocardless/hutch). The opinions baked into the module are the same as Hutches:
+Starsky is a high-level, opinionated node module for writing services that consume messages from [RabbitMQ](https://www.rabbitmq.com/). It's modeled directly after the elegant approach taken by the Ruby library, [Hutch](https://github.com/gocardless/hutch). The opinions baked into the module are the same as Hutch's:
 
   - topic exchanges
   - durable queues & exchanges
