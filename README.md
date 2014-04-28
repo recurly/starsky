@@ -1,7 +1,7 @@
 
 # Starsky
 
-Starsky is a high-level, opininated node module for writing services that consume messages from RabbitMQ. It's modeled directly after the elegant approach taken by the Ruby library, [Hutch](https://github.com/gocardless/hutch). The opinions baked into the module are the same as Hutches:
+Starsky is a high-level, opinionated node module for writing services that consume messages from RabbitMQ. It's modeled directly after the elegant approach taken by the Ruby library, [Hutch](https://github.com/gocardless/hutch). The opinions baked into the module are the same as Hutches:
 
   - topic exchanges
   - durable queues & exchanges
@@ -76,9 +76,9 @@ function confirm (err) {
 
 Consumers are defined by a simple node module that exports a few key things:
 
-  - `name` -- The name of the queue to create and recieve message from.
+  - `name` -- The name of the queue to create and receive messages from.
   - `topic` -- The topic to use as a subscription binding.
-  - `consume` -- The function to mass each message to.
+  - `consume` -- The function to pass each message to.
 
 For example:
 
@@ -121,7 +121,7 @@ $ ./bin/starsky --help
     --mq_tls_key [mq_tls_key]    filepath to the tls key
 ```
 
-The one option that will standout there is the `config` option. This can be a yaml configuration file that follows the same format as Hutch. This allows you to share the same configuration file in an environment where you may have both Starsky & Hutch consumers.
+The one option that will standout there is the `config` option. This can be a yaml configuration file that follows the same format as Hutch. This allows you to share the same configuration file in an environment where you may have both Starsky & [Hutch](https://github.com/gocardless/hutch) consumers.
 
 ## Examples
 
