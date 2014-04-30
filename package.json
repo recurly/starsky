@@ -3,9 +3,6 @@
   "version": "0.2.5",
   "description": "A higher level and opinionated library on top of node-amqp.",
   "main": "index.js",
-  "bin": {
-    "starsky": "bin/starsky"
-  },
   "scripts": {
     "test": "make test"
   },
