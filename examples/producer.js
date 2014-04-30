@@ -1,7 +1,9 @@
 
 var starsky = require('..');
 
-starsky.configure(__dirname + '/config.yml');
+starsky.set('mq host', 'localhost');
+starsky.set('mq port', 5672);
+starsky.set('exchange', 'demo');
 
 setInterval(function () {
   starsky.publish('starsky.test', {
