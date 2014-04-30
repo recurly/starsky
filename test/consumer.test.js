@@ -5,9 +5,9 @@ describe('Consumer', function () {
   describe('.consume()', function () {
     it('should throw when not ready', function (done) {
       var starsky = new Starsky();
-      var consumer = starsky.consumer('test', 'a.b');
+      var consumer = starsky.consumer('test');
       ;(function () {
-        consumer.consume();
+        consumer.process();
       }).should.throw('not ready');
       done();
     });
@@ -18,7 +18,7 @@ describe('Consumer', function () {
         var consumer = starsky.consumer('test-2');
 
         consumer.subscribe('foo.bar');
-        consumer.consume(function (msg, next) {
+        consumer.process(function (msg, next) {
           msg.should.have.property('id');
           msg.should.have.property('timestamp');
           msg.should.have.property('topic', 'foo.bar');
@@ -29,9 +29,7 @@ describe('Consumer', function () {
 
         // hack... need to expose consumer creation events or something.
         setTimeout(function () {
-          starsky.publish('foo.bar', {
-            hello: 'world'
-          });
+          starsky.publish('foo.bar', { hello: 'world' });
         }, 50);
       });
     });
