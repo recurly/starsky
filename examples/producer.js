@@ -6,10 +6,10 @@ starsky.set('mq port', 5672);
 starsky.set('exchange', 'demo');
 
 setInterval(function () {
-  starsky.publish('starsky.test', {
-    subject: 'test message'
+  starsky.publish('log.info', {
+    hello: 'world'
   }, confirm);
-}, 1000);
+}, 100);
 
 function confirm (err) {
   if (err) console.error(err.message);

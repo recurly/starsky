@@ -67,41 +67,6 @@ describe('Starsky', function () {
     });
   });
 
-  describe('.load()', function () {
-    var starsky = new Starsky();
-
-    before(function () {
-      sinon.stub(starsky.config, 'load');
-    });
-
-    after(function () {
-      starsky.config.load.restore();
-    });
-
-    it('should proxy to config.load()', function () {
-      starsky.load('/my/config.yml');
-      starsky.config.load.calledWith('/my/config.yml').should.equal(true);
-    });
-  });
-
-  describe('.configure()', function () {
-    var starsky = new Starsky();
-
-    before(function () {
-      sinon.stub(starsky.config, 'load');
-    });
-
-    after(function () {
-      starsky.config.load.restore();
-    });
-
-    it('should proxy to config.load()', function () {
-      starsky.configure('/my/config.yml');
-      starsky.config.load.calledWith('/my/config.yml').should.equal(true);
-    });
-  });
-
-
   describe('.publish()', function () {
     describe('before connected', function () {
       it('should callback() with an error', function (done) {

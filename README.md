@@ -18,7 +18,7 @@ $ npm install starsky
 
 ## Usage
 
-### Connecting
+### Connections
 
 To connect, invoke `starsky.connect()`. The callback will be invoked once the connection to RabbitMQ has been established and the underlying exchange as been created and/or opened.
 
@@ -28,20 +28,39 @@ var starsky = require('starsky');
 starsky.connect(callback);
 ```
 
-### Configuring
-
-To configure programatically, invoke `starsky.set()` with the the option name and value:
+To disconnect, invoke `starsky.disconnect(callback)`. The callback will be called once any in-flight messages have been processed and/or published.
 
 ```js
 var starsky = require('starsky');
 
-starsky.set('mq vhost', '/demo');
-starsky.set('mq tls', true);
-
-starsky.connect(callback);
+starsky.disconnect(callback);
 ```
 
-There are several configuration options:
+### Configuring
+
+To configure programatically, invoke `starsky.set()` with the configuration option name and value:
+
+```js
+var starsky = require('starsky');
+
+starsky.set('mq host', 'localhost');
+starsky.set('mq port', 5672);
+starsky.set('exchange', 'demo');
+```
+
+If configuration objects are more your style, just pass them all in at once.
+
+```js
+var starsky = require('starsky');
+
+starsky.set({
+  'mq host': 'localhost',
+  'mq port': 5672,
+  'exchange': 'demo'
+});
+```
+
+The configuration options:
 
   - `mq exchange` -- The topic exchange name to be created. Defaults to `starsky`
   - `mq host` -- The rabbitmq host. Defaults to `localhost`
@@ -56,85 +75,86 @@ There are several configuration options:
 
 ### Publishing
 
-To publish a message, invoke `startsky.publish()` with the topic name, the message and the callback which should be used for the message confirmation.
+To publish a message, invoke `starsky.publish(topic, callback)` with a topic name, message and callback. The callback will be used for the message confirmation. If the underlying connection has not been established when publishing a message, an error will bubble up to the callback.
 
 ```js
 var starsky = require('starsky');
 
-starsky.connect(function () {
-  starsky.publish('starsky.test', {
-    subject: 'test message'
+starsky.set('mq host', 'localhost');
+starsky.set('mq port', 5672);
+starsky.set('exchange', 'demo');
+
+setInterval(function () {
+  starsky.publish('log.info', {
+    hello: 'world'
   }, confirm);
-});
+}, 1000);
 
 function confirm (err) {
-  if (err) throw err
+  if (err) console.error(err.message);
 }
+
+starsky.connect();
 ```
 
 ### Consuming
 
-Consumers are defined by a simple node module that exports a few key things:
-
-  - `name` -- The name of the queue to create and receive messages from.
-  - `topic` -- The topic to use as a subscription binding.
-  - `consume` -- The function to pass each message to.
-
-For example:
+To create a consumer, invoke `starsky.consumer(name)`. The name should be whatever you want the name of the queue to be inside RabbitMQ. Note that if you have a prefix option set, that will be prefixed to the name when the queue is created.
 
 ```js
-exports.name = 'test-consumer';
-exports.topic = 'starsky.test';
-exports.consume = function (msg, next) {
-  console.log('%j', msg);
-  setTimeout(next, 1000);
-};
+var starsky = require('starsky');
+
+var consumer = starsky.consumer('log');
+
+starsky.set('mq host', 'localhost');
+starsky.set('mq port', 5672);
+starsky.set('exchange', 'demo');
+
+starsky.once('connect', function () {
+  consumer.subscribe('log.info');
+  consumer.process(function (msg, done) {
+    console.log('id: %s', msg.id);
+    console.log('body: %j', msg.body);
+    console.log('timestamp: %s', msg.timestamp);
+    console.log('topic: %s', msg.topic);
+    done();
+  });
+});
+
+starsky.connect();
 ```
 
-In order to run the consumer, leverage the cli tool that comes with this library:
+To subscribe to a topic, invoke `consumer.subscribe(topic)`. This will setup the necessary queue bindings with RabbitMQ. You must setup all your subscriptions prior to processing messages.
 
-```
-$ starsky [options] <cosumer_module>
-```
-
-The options are the same as the configuration mentioned [above](#configuring):
-
-```sh
-$ ./bin/starsky --help
-
-  Usage: starsky [options] consumer-module.js
-
-  Options:
-
-    -h, --help                   output usage information
-    -V, --version                output the version number
-    --config [config]            filepath to the yaml or json configuration
-    --namespace [namespace]      namespace to prepend to consumer queue names
-    --mq_exchange [mq_exchange]  exchange name
-    --mq_host [mq_host]          rabbit server host
-    --mq_port [mq_port]          rabbit server port
-    --mq_vhost [mq_vhost]        rabbit server vhost
-    --mq_username [mq_username]  rabbit server username
-    --mq_password [mq_password]  rabbit server password
-    --mq_tls [mq_tls]            use tls for the rabbit server connection
-    --mq_tls_cert [mq_tls_cert]  filepath to the tls cert
-    --mq_tls_key [mq_tls_key]    filepath to the tls key
+```js
+consumer.subscribe('log.info');
+consumer.subscribe('log.#');
+consumer.subscribe('log.*');
 ```
 
-The one option that will standout there is the `config` option. This can be a yaml configuration file that follows the same format as Hutch. This allows you to share the same configuration file in an environment where you may have both Starsky & [Hutch](https://github.com/gocardless/hutch) consumers.
+To start processing message, invoke `consumer.process(fn)`. This will invoke the function for each message routed to the queue. There are two arguments passed to the function: `msg` and `done`. The `msg` is an object with the following properties:
 
-## Examples
+  - `id`: A unique identifer for the message.
+  - `body`: The actual message published.
+  - `timestamp`: The time when the message was published.
+  - `topic`: The topic the message was published with.
 
-To run the examples, we need to start the consumer. We will do this by pointing the starsky bin script to our example consumer.
-
-```sh
-$ starsky --config ./examples/config.yml ./examples/consumer.js
+```js
+consumer.process(function (msg, done) {
+  console.log('id: %s', msg.id);
+  console.log('body: %j', msg.body);
+  console.log('timestamp: %s', msg.timestamp);
+  console.log('topic: %s', msg.topic);
+  done();
+});
 ```
 
-Then we just need to start the producer and watch the messages flow.
+The `done` function is a callback that should be invoked when all the work that needs to be accomplished it finished. If an error occurs that requires the message to be re-tried, pass the error as the first argument. This will direct the message to be rejected.
 
-```sh
-$ node ./examples/producer.js
+To control the amount of messages the consumer can accept, invoke `consumer.prefetch(amount)` method. By default it only accept `1` message at a time. If you want to turn on the "firehouse", meaning accept all the messages as they are published, use `0`.
+
+```js
+consumer.prefetch(10);
 ```
 
 ## Development

@@ -80,48 +80,4 @@ describe('Config', function () {
       config.get('mq tls').should.equal(true);
     });
   });
-
-  describe('load', function () {
-    it('should load from a YAML file', function () {
-      var config = new Config();
-      config.load(path.resolve(__dirname, './fixtures/config.yml'));
-      config.get('namespace').should.equal('demo');
-      config.get('mq host').should.equal('somehost');
-      config.get('mq port').should.equal(3000);
-      config.get('mq exchange').should.equal('test');
-      config.get('mq vhost').should.equal('/test');
-      config.get('mq tls').should.equal(true);
-      config.get('mq username').should.equal('u');
-      config.get('mq password').should.equal('p');
-      config.get('mq tls cert').should.equal('/cert/path');
-      config.get('mq tls key').should.equal('/key/path');
-    });
-
-    it('should load from a JSON file', function () {
-      var config = new Config();
-      config.load(path.resolve(__dirname, './fixtures/config.json'));
-      config.get('namespace').should.equal('demo');
-      config.get('mq host').should.equal('somehost');
-      config.get('mq port').should.equal(3000);
-      config.get('mq exchange').should.equal('test');
-      config.get('mq vhost').should.equal('/test');
-      config.get('mq tls').should.equal(true);
-      config.get('mq username').should.equal('u');
-      config.get('mq password').should.equal('p');
-      config.get('mq tls cert').should.equal('/cert/path');
-      config.get('mq tls key').should.equal('/key/path');
-    });
-
-    it('should load from an object', function () {
-      var config = new Config();
-      config.set({
-          'mq host': 'somehost'
-        , 'mq port': 3000
-        , 'mq exchange': 'test'
-      });
-      config.get('mq host').should.equal('somehost');
-      config.get('mq port').should.equal(3000);
-      config.get('mq exchange').should.equal('test');
-    });
-  });
 });

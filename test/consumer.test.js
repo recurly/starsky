@@ -27,10 +27,9 @@ describe('Consumer', function () {
           done();
         });
 
-        // hack... need to expose consumer creation events or something.
-        setTimeout(function () {
+        consumer.once('ready', function () {
           starsky.publish('foo.bar', { hello: 'world' });
-        }, 50);
+        });
       });
     });
   });
