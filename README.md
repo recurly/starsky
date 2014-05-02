@@ -20,7 +20,7 @@ $ npm install starsky
 
 ### Connections
 
-To connect, invoke `starsky.connect()`. The callback will be invoked once the connection to RabbitMQ has been established and the underlying exchange as been created and/or opened.
+To connect, invoke `starsky.connect`. The callback will be invoked once the connection to RabbitMQ has been established and the underlying exchange as been created and/or opened.
 
 ```js
 var starsky = require('starsky');
@@ -28,7 +28,7 @@ var starsky = require('starsky');
 starsky.connect(callback);
 ```
 
-To disconnect, invoke `starsky.disconnect(callback)`. The callback will be called once any in-flight messages have been processed and/or published.
+To disconnect, invoke `starsky.disconnect`. The callback will be called once any in-flight messages have been processed and/or published.
 
 ```js
 var starsky = require('starsky');
@@ -38,7 +38,7 @@ starsky.disconnect(callback);
 
 ### Configuring
 
-To configure programatically, invoke `starsky.set()` with the configuration option name and value:
+To configure programatically, invoke `starsky.set` with the configuration option name and value:
 
 ```js
 var starsky = require('starsky');
@@ -75,7 +75,7 @@ The configuration options:
 
 ### Publishing
 
-To publish a message, invoke `starsky.publish(topic, callback)` with a topic name, message and callback. The callback will be used for the message confirmation. If the underlying connection has not been established when publishing a message, an error will bubble up to the callback.
+To publish a message, invoke `starsky.publish` with a topic, message and callback. The callback will be used for the message confirmation. If the underlying connection has not been established when publishing a message, an error will bubble up to the callback.
 
 ```js
 var starsky = require('starsky');
@@ -99,7 +99,7 @@ starsky.connect();
 
 ### Consuming
 
-To create a consumer, invoke `starsky.consumer(name)`. The name should be whatever you want the name of the queue to be inside RabbitMQ. Note that if you have a prefix option set, that will be prefixed to the name when the queue is created.
+To create a consumer, invoke `starsky.consumer`. The name should be whatever you want the name of the queue to be inside RabbitMQ. Note that if you have a prefix option set, that will be prefixed to the name when the queue is created.
 
 ```js
 var starsky = require('starsky');
@@ -124,7 +124,7 @@ starsky.once('connect', function () {
 starsky.connect();
 ```
 
-To subscribe to a topic, invoke `consumer.subscribe(topic)`. This will setup the necessary queue bindings with RabbitMQ. You must setup all your subscriptions prior to processing messages.
+To subscribe to a topic, invoke `consumer.subscribe`. This will setup the necessary queue bindings with RabbitMQ. You must setup all your subscriptions prior to processing messages.
 
 ```js
 consumer.subscribe('log.info');
@@ -132,7 +132,7 @@ consumer.subscribe('log.#');
 consumer.subscribe('log.*');
 ```
 
-To start processing message, invoke `consumer.process(fn)`. This will invoke the function for each message routed to the queue. There are two arguments passed to the function: `msg` and `done`. The `msg` is an object with the following properties:
+To start processing message, invoke `consumer.process`. This will invoke the function for each message routed to the queue. There are two arguments passed to the function: `msg` and `done`. The `msg` is an object with the following properties:
 
   - `id`: A unique identifer for the message.
   - `body`: The actual message published.
@@ -151,7 +151,7 @@ consumer.process(function (msg, done) {
 
 The `done` function is a callback that should be invoked when all the work that needs to be accomplished it finished. If an error occurs that requires the message to be re-tried, pass the error as the first argument. This will direct the message to be rejected.
 
-To control the amount of messages the consumer can accept, invoke `consumer.prefetch(amount)` method. By default it only accept `1` message at a time. If you want to turn on the "firehouse", meaning accept all the messages as they are published, use `0`.
+To control the amount of messages the consumer can accept, invoke `consumer.prefetch` method. By default it only accept `1` message at a time. If you want to turn on the "firehouse", meaning accept all the messages as they are published, use `0`.
 
 ```js
 consumer.prefetch(10);
