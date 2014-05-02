@@ -149,9 +149,9 @@ consumer.process(function (msg, done) {
 });
 ```
 
-The `done` function is a callback that should be invoked when all the work that needs to be accomplished it finished. If an error occurs that requires the message to be re-tried, pass the error as the first argument. This will direct the message to be rejected.
+The `done` function is a callback that should be invoked when all the work that needs to be accomplished is finished. If an error occurs that requires the message to be re-tried, pass the error as the first argument. This will direct the message to be rejected.
 
-To control the amount of messages the consumer can accept, invoke `consumer.prefetch` method. By default it only accept `1` message at a time. If you want to turn on the "firehouse", meaning accept all the messages as they are published, use `0`.
+To control the amount of messages the consumer can accept, invoke `consumer.prefetch` method. By default it only accepts 1 message at a time. If you want to turn on the "firehose", meaning accept all the messages as they are published, use `0`.
 
 ```js
 consumer.prefetch(10);
