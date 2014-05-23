@@ -1,3 +1,8 @@
+0.3.1 / 2014-05-22
+==================
+
+  - Return consumer quit() early if the queue has not had time to be created.
+
 0.3.0 / 2014-05-02
 ==================
 
