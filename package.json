@@ -21,10 +21,9 @@
   },
   "homepage": "https://github.com/recurly/starsky",
   "devDependencies": {
-    "should": "2.1.1",
-    "jshint-stylish": "0.1.4",
+    "make-lint": "1.0.1",
     "mocha": "1.16.1",
-    "jshint": "2.3.0",
+    "should": "2.1.1",
     "sinon": "1.7.3"
   },
   "dependencies": {
