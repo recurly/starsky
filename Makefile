@@ -1,4 +1,7 @@
-REPORTER = "spec"
+REPORTER = spec
+SRC = lib/*.js
+
+include node_modules/make-lint/index.mk
 
 default: install
 
@@ -21,11 +24,6 @@ lib-cov:
 	@touch coverage.html
 	@jscoverage lib lib-cov
 	@open coverage.html
-
-lint:
-	@./node_modules/.bin/jshint index.js lib \
-		--reporter ./node_modules/jshint-stylish/stylish.js \
-		--config $(BASE)/.jshintrc
 
 clean:
 	@rm -rf node_modules coverage.html
