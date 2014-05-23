@@ -24,11 +24,19 @@ describe('Starsky', function () {
   });
 
   describe('.disconnect()', function () {
-    var starsky = new Starsky();
 
     it('should emit "disconnect"', function (done) {
+      var starsky = new Starsky();
       starsky.on('disconnect', done);
       starsky.on('connect', starsky.disconnect);
+      starsky.connect();
+    })
+
+    it('should disconnect even if there are unconnected consumers', function(done) {
+      var starsky = new Starsky()
+      starsky.on('disconnect', done);
+      starsky.on('connect', starsky.disconnect);
+      starsky.consumer('test-consumer');
       starsky.connect();
     })
   });
