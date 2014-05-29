@@ -33,12 +33,20 @@ describe('Starsky', function () {
     })
 
     it('should disconnect even if there are unconnected consumers', function(done) {
-      var starsky = new Starsky()
+      var starsky = new Starsky();
       starsky.on('disconnect', done);
       starsky.on('connect', starsky.disconnect);
       starsky.consumer('test-consumer');
       starsky.connect();
     })
+
+    it('should call the callback supplied to disconnect', function(done) {
+      var starsky = new Starsky();
+      starsky.on('connect', function() {
+        starsky.disconnect(done);
+      });
+      starsky.connect();
+    });
   });
 
   describe('.set()', function () {
