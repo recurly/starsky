@@ -1,5 +1,5 @@
-
 var Starsky = require('..').Starsky;
+var sinon = require('sinon');
 
 describe('Consumer', function () {
   describe('.consume()', function () {
@@ -29,6 +29,24 @@ describe('Consumer', function () {
 
         consumer.once('ready', function () {
           starsky.publish('foo.bar', { hello: 'world' });
+        });
+      });
+    });
+
+    it('configures queues with dead letter exchanges', function (done) {
+      var starsky = new Starsky();
+      starsky.connect(function () {
+        var consumer = starsky.consumer('test-3', { 'x-dead-letter-exchange': 'test.dlx' });
+        sinon.spy(starsky.connection, 'queue');
+        consumer.subscribe('foo.bar');
+        consumer.process(function() { });
+        consumer.once('ready', function() {
+          starsky.connection.queue.firstCall.args[1].should.eql({
+            durable: true,
+            autoDelete: false,
+            arguments: { 'x-dead-letter-exchange': 'test.dlx' }
+          });
+          done();
         });
       });
     });
