@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.org/recurly/starsky.svg?branch=master)](https://travis-ci.org/recurly/starsky)
 
+# DEPRECATED
+
+This package is no longer actively maintained.
+
 # Starsky
 
 Starsky is a high-level, opinionated node module for writing services that consume messages from [RabbitMQ](https://www.rabbitmq.com/). It's modeled directly after the elegant approach taken by the Ruby library, [Hutch](https://github.com/gocardless/hutch). The opinions baked into the module are the same as Hutch's:
