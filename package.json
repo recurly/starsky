@@ -1,6 +1,6 @@
 {
   "name": "starsky",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A higher level and opinionated library on top of node-amqp.",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "sinon": "1.10.2"
   },
   "dependencies": {
-    "amqp": "0.2.0",
+    "amqp": "0.2.7",
     "node-uuid": "1.4.1",
     "commander": "2.1.0",
     "debug": "0.7.4",
