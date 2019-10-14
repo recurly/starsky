@@ -1,8 +1,14 @@
 language: node_js
-node_js:
-  - "8.16.0"
+dist: xenial
 addons:
   apt:
     packages:
       - rabbitmq-server
-script: make test
+services:
+  - rabbitmq
+node_js:
+  - "8.16.0"
+install:
+  - make install
+script:
+  - make test
