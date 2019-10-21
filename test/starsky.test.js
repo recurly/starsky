@@ -27,6 +27,7 @@ describe('Starsky', function () {
 
     it('should emit "disconnect"', function (done) {
       var starsky = new Starsky();
+      starsky.on('error', function(err){console.log(err)});
       starsky.on('disconnect', done);
       starsky.on('connect', starsky.disconnect);
       starsky.connect();
@@ -34,6 +35,7 @@ describe('Starsky', function () {
 
     it('should disconnect even if there are unconnected consumers', function(done) {
       var starsky = new Starsky();
+      starsky.on('error', function(err){console.log(err)});
       starsky.on('disconnect', done);
       starsky.on('connect', starsky.disconnect);
       starsky.consumer('test-consumer');
@@ -42,6 +44,7 @@ describe('Starsky', function () {
 
     it('should call the callback supplied to disconnect', function(done) {
       var starsky = new Starsky();
+      starsky.on('error', function(err){console.log(err)});
       starsky.on('connect', function() {
         starsky.disconnect(done);
       });
