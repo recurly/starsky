@@ -4,7 +4,9 @@
   "description": "A higher level and opinionated library on top of node-amqp.",
   "main": "index.js",
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,8 @@
     "debug": "0.7.4",
     "to-snake-case": "0.1.2",
     "to-space-case": "0.1.3",
-    "component-type": "1.0.0"
-  }
+    "component-type": "1.0.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
