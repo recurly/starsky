@@ -23,6 +23,7 @@ describe('Consumer', function () {
           msg.should.have.property('timestamp');
           msg.should.have.property('topic', 'foo.bar');
           msg.body.should.have.property('hello', 'world');
+          msg.should.have.property('headers');
           next();
           done();
         });
