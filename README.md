@@ -122,6 +122,7 @@ starsky.once('connect', function () {
     console.log('body: %j', msg.body);
     console.log('timestamp: %s', msg.timestamp);
     console.log('topic: %s', msg.topic);
+    console.log('headers %s', msg.headers);
     done();
   });
 });
@@ -143,6 +144,7 @@ To start processing message, invoke `consumer.process`. This will invoke the fun
   - `body`: The actual message published.
   - `timestamp`: The time when the message was published.
   - `topic`: The topic the message was published with.
+  - `headers`: The headers associated with the message.
 
 ```js
 consumer.process(function (msg, done) {
@@ -150,6 +152,7 @@ consumer.process(function (msg, done) {
   console.log('body: %j', msg.body);
   console.log('timestamp: %s', msg.timestamp);
   console.log('topic: %s', msg.topic);
+  console.log('headers %s', msg.headers);
   done();
 });
 ```
