@@ -1,3 +1,17 @@
+0.3.4 / 2022-02-25
+==================
+  - Add headers to object param used in callback that handles incoming messages
+
+0.3.3 / 2019-10-23
+==================
+  - Update node-uuid dependency to v1.4.6
+  - Fix tests for travis
+
+0.3.2 / 2019-07-08
+==================
+  - Update amqp dependency to v0.2.7
+  - Add deprecation warning
+
 0.3.1 / 2014-05-22
 ==================
 
